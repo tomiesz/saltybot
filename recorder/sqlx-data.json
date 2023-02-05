@@ -1,0 +1,17 @@
+{
+  "db": "PostgreSQL",
+  "e07d6670b0be292b4dc0309cea87572c5d1c8ca0fda957f84c0ad31d55ce8053": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Int2"
+        ]
+      }
+    },
+    "query": "INSERT INTO matches (player1, player2, winner) VALUES ( $1, $2, $3)"
+  }
+}
