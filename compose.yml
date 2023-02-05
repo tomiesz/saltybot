@@ -1,0 +1,51 @@
+services: 
+
+  recorder:
+    build: "./recorder"
+    environment: 
+      DATABASE_URL: "db"
+      PASSWORD_FILE: "/run/secrets/recorder_password"
+      RUST_BACKTRACE: 1
+    restart: always
+    secrets:
+      - recorder_password
+    depends_on:
+      db: 
+        condition: service_healthy
+    
+  db: 
+    image: postgres
+    expose: 
+      - 5432
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD_FILE:  "/run/secrets/db_root_password"
+      RECORDER_PASSWORD_FILE: "/run/secrets/recorder_password"
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+      - type: bind 
+        source: "./initdb"
+        target: "/docker-entrypoint-initdb.d/"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    secrets: 
+      - db_root_password
+      - recorder_password
+  
+  adminer:
+    image: adminer
+    restart: always 
+    ports: [8080:8080]
+
+volumes:
+  pgdata:
+
+secrets: 
+  recorder_password:
+    file: "./secrets/recorder_password.txt"
+  db_root_password:
+    file: "./secrets/db_root_password.txt"
