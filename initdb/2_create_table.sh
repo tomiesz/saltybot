@@ -2,10 +2,10 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -d "salty" <<-EOSQL
-    CREATE TABLE matches (
+    CREATE TABLE players (
         id SERIAL PRIMARY KEY,
-        player1 TEXT NOT NULL,
-        player2 TEXT NOT NULL,
-        winner SMALLINT NOT NULL
+        name TEXT NOT NULL UNIQUE,
+        wins INT DEFAULT 0,
+        losses INT DEFAULT 0
     )
 EOSQL

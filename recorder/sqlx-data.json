@@ -1,17 +1,27 @@
 {
   "db": "PostgreSQL",
-  "e07d6670b0be292b4dc0309cea87572c5d1c8ca0fda957f84c0ad31d55ce8053": {
+  "514b5d49110e3651b5205c87d4fef533fc035dfd527be75ff5526d2420358899": {
     "describe": {
       "columns": [],
       "nullable": [],
       "parameters": {
         "Left": [
-          "Text",
-          "Text",
-          "Int2"
+          "Text"
         ]
       }
     },
-    "query": "INSERT INTO matches (player1, player2, winner) VALUES ( $1, $2, $3)"
+    "query": "INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = EXCLUDED.wins + 1"
+  },
+  "c75ede92573fc02a198ec0772b2092783075fd3c8e0a136be5c6c3eaa358ae8b": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = EXCLUDED.losses + 1"
   }
 }

@@ -135,16 +135,14 @@ impl Logger {
                             "Writing match {} vs {} -> {:#?}",
                             state.player1, state.player2, state.status
                         );
-                        let winner: i16 = state.status.into();
-                        query!(
-                            "INSERT INTO matches (player1, player2, winner) VALUES ( $1, $2, $3)",
-                            state.player1,
-                            state.player2,
-                            winner
-                        )
-                        .execute(&self.pool)
-                        .await
-                        .unwrap(); // TODO
+                        //update win/loss counts
+                        let (winner, loser) = match state.status {
+                            MatchStatus::PlayerOneWin => (&state.player1, &state.player2),
+                            MatchStatus::PlayerTwoWin => (&state.player2, &state.player1),
+                            _ => panic!("wrong state"),
+                        };
+                        query!("INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = EXCLUDED.wins + 1",winner).execute(&self.pool).await.unwrap();
+                        query!("INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = EXCLUDED.losses + 1",loser).execute(&self.pool).await.unwrap();
                     }
                     last_match = Some(state);
                 }
