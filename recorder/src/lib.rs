@@ -146,8 +146,6 @@ impl Logger {
                     }
                     last_match = Some(state);
                 }
-            } else {
-                dbg!(&data);
             }
             sleep(Duration::from_secs(1)).await;
         }
