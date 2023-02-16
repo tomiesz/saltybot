@@ -1,6 +1,6 @@
 use reqwest::Client;
 use serde::Deserialize;
-use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
+use sqlx::postgres::{PgPool, PgPoolOptions};
 use sqlx::{query, ConnectOptions};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tokio::time::sleep;
@@ -141,8 +141,8 @@ impl Logger {
                             MatchStatus::PlayerTwoWin => (&state.player2, &state.player1),
                             _ => panic!("wrong state"),
                         };
-                        query!("INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = EXCLUDED.wins + 1",winner).execute(&self.pool).await.unwrap();
-                        query!("INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = EXCLUDED.losses + 1",loser).execute(&self.pool).await.unwrap();
+                        query!("INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = players.wins + 1",winner).execute(&self.pool).await.unwrap();
+                        query!("INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = players.losses + 1",loser).execute(&self.pool).await.unwrap();
                     }
                     last_match = Some(state);
                 }

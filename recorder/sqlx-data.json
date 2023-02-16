@@ -1,6 +1,6 @@
 {
   "db": "PostgreSQL",
-  "514b5d49110e3651b5205c87d4fef533fc035dfd527be75ff5526d2420358899": {
+  "529a6d72ae7b686fa32d81bc32226e6f739b14f940a98ac8acff3ff33546b384": {
     "describe": {
       "columns": [],
       "nullable": [],
@@ -10,9 +10,9 @@
         ]
       }
     },
-    "query": "INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = EXCLUDED.wins + 1"
+    "query": "INSERT INTO players (name, wins) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET wins = players.wins + 1"
   },
-  "c75ede92573fc02a198ec0772b2092783075fd3c8e0a136be5c6c3eaa358ae8b": {
+  "adffd7d54b6d4be148f2d469a5c3c20d7e1416864b6af874c8a06e0c715a81a9": {
     "describe": {
       "columns": [],
       "nullable": [],
@@ -22,6 +22,6 @@
         ]
       }
     },
-    "query": "INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = EXCLUDED.losses + 1"
+    "query": "INSERT INTO players (name, losses) VALUES ($1, 1) ON CONFLICT (name) DO UPDATE SET losses = players.losses + 1"
   }
 }
